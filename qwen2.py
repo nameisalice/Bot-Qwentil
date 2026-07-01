@@ -15,32 +15,36 @@ import json
 def debug_log(msg):
     pass
 
-def generate_human_username():
+_HUMAN_NAMES_CACHE = None
+
+def load_human_names(path="human_name.json"):
+    global _HUMAN_NAMES_CACHE
+    if _HUMAN_NAMES_CACHE is not None:
+        return _HUMAN_NAMES_CACHE
+
+    names_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), path)
+    with open(names_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
     first_names = [
-        "john", "james", "robert", "michael", "william", "david", "richard", "joseph", "thomas", "charles", 
-        "daniel", "matthew", "anthony", "mark", "donald", "steven", "paul", "andrew", "joshua", "kenneth", 
-        "kevin", "brian", "george", "timothy", "ronald", "edward", "jason", "jeffrey", "ryan", "jacob", 
-        "gary", "nicholas", "eric", "jonathan", "stephen", "larry", "justin", "scott", "brandon", "benjamin", 
-        "samuel", "gregory", "alexander", "frank", "patrick", "raymond", "jack", "dennis", "jerry", "tyler", 
-        "mary", "patricia", "jennifer", "elizabeth", "linda", "barbara", "susan", "margaret", "dorothy", 
-        "lisa", "nancy", "karen", "betty", "helen", "sandra", "donna", "carol", "ruth", "sharon", 
-        "michelle", "laura", "sarah", "kimberly", "deborah", "jessica", "shirley", "cynthia", "angela", 
-        "melissa", "brenda", "amy", "anna", "rebecca", "virginia", "kathleen", "pamela", "martha", 
-        "debra", "amanda", "stephanie", "carolyn", "christine", "marie", "janet", "catherine", "frances", 
-        "ann", "diana", "alice", "julie", "heather", "teresa", "adit", "budi", "chandra", "deni", 
-        "eko", "fajar", "guntur", "hendra", "indra", "joko", "kartika", "lestari", "megawati", "nining", 
-        "panji", "rudi", "siti", "tri", "utami", "wawan", "yanto"
+        str(name).strip().lower()
+        for name in data.get("first_names", [])
+        if str(name).strip()
     ]
     last_names = [
-        "smith", "johnson", "williams", "brown", "jones", "garcia", "miller", "davis", "rodriguez", 
-        "martinez", "hernandez", "lopez", "gonzalez", "wilson", "anderson", "thomas", "taylor", "moore", 
-        "jackson", "martin", "lee", "perez", "thompson", "white", "harris", "sanchez", "clark", 
-        "ramirez", "lewis", "robinson", "walker", "young", "allen", "king", "wright", "scott", 
-        "torres", "nguyen", "hill", "flores", "green", "adams", "nelson", "baker", "hall", 
-        "rivera", "campbell", "mitchell", "carter", "roberts", "wijaya", "kusuma", "nasution", 
-        "siregar", "lubis", "hutapea", "sinaga", "simanjuntak", "pratama", "setiawan", "gunawan", 
-        "hidayat", "putra", "sari", "lestari"
+        str(name).strip().lower()
+        for name in data.get("last_names", [])
+        if str(name).strip()
     ]
+
+    if not first_names or not last_names:
+        raise ValueError("human_name.json harus punya first_names dan last_names yang tidak kosong")
+
+    _HUMAN_NAMES_CACHE = (first_names, last_names)
+    return _HUMAN_NAMES_CACHE
+
+def generate_human_username():
+    first_names, last_names = load_human_names()
     first = random.choice(first_names)
     last = random.choice(last_names)
     digits = str(random.randint(10, 999))
