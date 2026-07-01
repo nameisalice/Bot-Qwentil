@@ -113,11 +113,11 @@ Setelah semua proses selesai, ringkasan pengujian akan ditampilkan:
 📊 SUMMARY HASIL PENGUJIAN API KEY:
 =================================================================
 Total Registrasi Diproses : 2
-✔ API Key OK / Aktif      : 1
+✔ API Key OK / Aktif      : 2
 ✖ API Key DENIED          : 0
 ⚠ API Key UNELIGIBLE      : 0
 💀 API Key DEAD/EXPIRED    : 0
-✗ Gagal Registrasi Bot    : 1
+✗ Gagal Registrasi Bot    : 0
 ```
 
 ---
